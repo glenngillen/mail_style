@@ -29,11 +29,15 @@ module Roadie
 
     private
       def url_options
-        Rails.application.config.action_mailer.default_url_options
+        if in_rails?
+          Rails.application.config.action_mailer.default_url_options
+        end
       end
 
       def stylesheet_root
-        Rails.root.join('public', 'stylesheets')
+        if in_rails?
+          Rails.root.join('public', 'stylesheets')
+        end
       end
 
       def inline_style_response(response)
@@ -51,6 +55,10 @@ module Roadie
 
       def css_rules
         @css_rules ||= Roadie.load_css(stylesheet_root, css_targets) if css_targets.present?
+      end
+
+      def in_rails?
+        defined?(Rails)
       end
   end
 end
